@@ -30,19 +30,7 @@ public class QuizLogic implements Serializable {
 	
     	public void testMetod() {
     		loadHiScore();
-    		//saveHighScore();
-    		/*
     		
-    		
-    		if (qb.saveQuestionBank()) {
-    			System.out.println("Saved!");
-    		} else {
-    			System.out.println("Fel");
-    		}
-    		System.out.println(qb.getQuestionsAsString());
-    		*/
-    		
-    		//System.out.println(randomQuestion());
     	}
     	
     	public void loadHiScore() {
