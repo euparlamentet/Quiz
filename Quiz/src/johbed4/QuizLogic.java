@@ -26,7 +26,7 @@ public class QuizLogic implements Serializable {
 	List<Player> highscoreList = new ArrayList<>();
 	private int currentPlayerIndex = 0;
 	
-	private static final String FILEPATH = "src/johbed4/files/hiscore.txt";
+	private static final String FILE = "hiscore.txt";
 	
     	public void testMetod() {
     		loadHiScore();
@@ -35,7 +35,7 @@ public class QuizLogic implements Serializable {
     	
     	public void loadHiScore() {
     		try {
-				FileReader hiscore = new FileReader(FILEPATH);
+				FileReader hiscore = new FileReader("./src/johbed4/files/hiscore.txt");
 				BufferedReader br = new BufferedReader(hiscore);
 				String line;
 				while ((line = br.readLine()) != null) {
@@ -56,22 +56,17 @@ public class QuizLogic implements Serializable {
     	}
     	
     	private void saveHighScore() {
-    		
-    		try {
-    			FileWriter hiscore = new FileWriter(FILEPATH);
-    			PrintWriter pw = new PrintWriter(hiscore);
-    			int pos = 1;
-    	        for (Player p : highscoreList) {
-    	            pw.println(pos + ", " + p.getName() + ", " + p.getHitRate());
-    	            pos++;
-    	        }
-    			pw.close();
-    			
-    		} catch (IOException e) {
-    			System.out.println("Nå fel spara");
+    	boolean append = false;	
+    	int pos = 1;
+    		for (Player p : highscoreList) {
+    			String text = (pos + ", " + p.getName() + ", " + p.getHitRate());
+    			System.out.println(TextFileHandling.save(text, FILE, append));
+    	        pos++;
+    	        append = true;
     		}
-
+    			
     	}
+    	
     	
     	public int randomIndex(int length) {
 			int index = -1;
@@ -153,12 +148,18 @@ public class QuizLogic implements Serializable {
         	p.setHitRate(p.getScore() / (double) p.getTries());
         	double hitRate = 0.0;
         	hitRate = p.getHitRate();
-        	
-        	for (Player p2 : highscoreList) {
-        		if (hitRate >= p2.getHitRate()) {
-        			highscoreList.get(9).setName(p.getName());
-        			highscoreList.get(9).setHitRate(hitRate);
-        			break;
+        	Player lastPlayer = highscoreList.get(highscoreList.size()-1);
+        	if (highscoreList.size() < 10) {
+        		highscoreList.add(p);
+        		
+        	} else {
+        		for (Player p2 : highscoreList) {
+        		
+        			if (hitRate >= lastPlayer.getHitRate()) {
+        				lastPlayer.setName(p.getName());
+        				lastPlayer.setHitRate(hitRate);
+        				break;
+        			}
         		}
         	}
         	sortHighscore();
