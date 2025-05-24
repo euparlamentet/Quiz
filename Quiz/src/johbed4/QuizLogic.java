@@ -4,18 +4,13 @@
 
 package johbed4;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import johbed4.*;
+import javax.swing.JFrame;
+
 import johbed4.QuestionBank.Question;
 import johbed4.QuestionBank.Question.Category;
 
@@ -28,31 +23,26 @@ public class QuizLogic implements Serializable {
 	
 	private static final String FILE = "hiscore.txt";
 	
-    	public void testMetod() {
+    	public void startGame() {
     		loadHiScore();
+    		JFrame frame = new GUI(this);
+    		frame.setVisible(true);
     		
     	}
     	
     	public void loadHiScore() {
-    		try {
-				FileReader hiscore = new FileReader("./src/johbed4/files/hiscore.txt");
-				BufferedReader br = new BufferedReader(hiscore);
-				String line;
-				while ((line = br.readLine()) != null) {
-					String[] parts = line.split(",");
-					if (parts.length == 3) {
-			            String pos = parts[0];
-			            String name = parts[1];
-			            double hitRate = Double.parseDouble(parts[2]);
-			            Player p = new Player(name);
-			            p.setHitRate(hitRate);
-			            highscoreList.add(p);
+			List<String> hiScoreList = TextFileHandling.read(FILE);
+			for (String s : hiScoreList) {
+				String[] parts = s.split(",");
+				if (parts.length == 3) {
+					String pos = parts[0];
+			        String name = parts[1];
+			        double hitRate = Double.parseDouble(parts[2]);
+			        Player p = new Player(name);
+			        p.setHitRate(hitRate);
+			        highscoreList.add(p);
 			        }
-				}
-					
-			} catch (IOException e) {
-				System.out.println("Nå fel");
-			}
+				}	
     	}
     	
     	private void saveHighScore() {
@@ -60,7 +50,6 @@ public class QuizLogic implements Serializable {
     	int pos = 1;
     		for (Player p : highscoreList) {
     			String text = (pos + ", " + p.getName() + ", " + p.getHitRate());
-    			System.out.println(TextFileHandling.save(text, FILE, append));
     	        pos++;
     	        append = true;
     		}
@@ -148,19 +137,16 @@ public class QuizLogic implements Serializable {
         	p.setHitRate(p.getScore() / (double) p.getTries());
         	double hitRate = 0.0;
         	hitRate = p.getHitRate();
-        	Player lastPlayer = highscoreList.get(highscoreList.size()-1);
+        	
         	if (highscoreList.size() < 10) {
         		highscoreList.add(p);
         		
         	} else {
-        		for (Player p2 : highscoreList) {
-        		
-        			if (hitRate >= lastPlayer.getHitRate()) {
-        				lastPlayer.setName(p.getName());
-        				lastPlayer.setHitRate(hitRate);
-        				break;
-        			}
-        		}
+        		Player lastPlayer = highscoreList.get(highscoreList.size()-1);
+        		if (hitRate >= lastPlayer.getHitRate()) {
+        			lastPlayer.setName(p.getName());
+        			lastPlayer.setHitRate(hitRate);
+        			}		
         	}
         	sortHighscore();
         	return 0;
@@ -176,7 +162,5 @@ public class QuizLogic implements Serializable {
 
 		public void setPlayers(List<Player> players) {
 			this.players = players;
-		}
-    	
-    	
+		}   	
 }

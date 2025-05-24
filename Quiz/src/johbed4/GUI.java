@@ -3,15 +3,9 @@ package johbed4;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.*;
 
 import johbed4.QuestionBank.Question;
@@ -217,7 +211,6 @@ public class GUI extends JFrame implements Serializable {
 	
 	private void startGameGUI() {
 		addPlayersGUI();
-		
 		questionGUI();
 	}
 
@@ -264,22 +257,10 @@ public class GUI extends JFrame implements Serializable {
 		});
 		buttonPanel.getPanel().add(wrong);
 		
-		
 		add(playerPanel.getPanel());
 		add(buttonPanel.getPanel(), BorderLayout.SOUTH);
 		refresh();
-	
-			
 		}
-    	
-		
-		
-    	
-		
-		
-		
-	
-
 
 
 	/**
